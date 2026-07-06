@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Export dev dataset
         run: npx sanity@latest dataset export dev dev-backup.tar.gz --project "$SANITY_PROJECT_ID"
