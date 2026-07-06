@@ -14,6 +14,8 @@ import { ScrollBand } from "@/components/ui/ScrollBand";
 import SkillsSection from "@/components/sections/SkillsSection";
 import ContactSection from "@/components/sections/ContactSection";
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const [settings, experiences, skillRows] = await Promise.all([
     sanityFetch({ query: SETTINGS_QUERY }),
