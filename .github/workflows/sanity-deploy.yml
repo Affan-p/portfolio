@@ -1,0 +1,36 @@
+name: Sanity Deploy
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: sanity-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    env:
+      SANITY_AUTH_TOKEN: ${{ secrets.SANITY_TOKEN }}
+      SANITY_PROJECT_ID: ${{ secrets.SANITY_PROJECT_ID }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Export dev dataset
+        run: npx sanity@latest dataset export dev dev-backup.tar.gz --project "$SANITY_PROJECT_ID"
+
+      - name: Import into production dataset
+        run: npx sanity@latest dataset import dev-backup.tar.gz production --project "$SANITY_PROJECT_ID" --replace
+
+      - name: Clean up backup file
+        if: always()
+        run: rm -f dev-backup.tar.gz
