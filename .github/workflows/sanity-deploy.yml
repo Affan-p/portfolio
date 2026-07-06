@@ -26,10 +26,10 @@ jobs:
           node-version: 22
 
       - name: Export dev dataset
-        run: npx sanity@latest dataset export dev dev-backup.tar.gz --project "$SANITY_PROJECT_ID"
+        run: npx sanity@latest dataset export dev dev-backup.tar.gz --project-id "$SANITY_PROJECT_ID"
 
       - name: Import into production dataset
-        run: npx sanity@latest dataset import dev-backup.tar.gz production --project "$SANITY_PROJECT_ID" --replace
+        run: npx sanity@latest dataset import dev-backup.tar.gz production --project-id "$SANITY_PROJECT_ID" --replace
 
       - name: Clean up backup file
         if: always()
