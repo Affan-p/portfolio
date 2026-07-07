@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
@@ -20,15 +19,43 @@ export default function ContactSection() {
 
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState(false);
+  const submittedAtRef = useRef("");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    submittedAtRef.current = new Date().toISOString();
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSending(true);
+    setError(false);
 
-    setTimeout(() => {
-      setSending(false);
+    try {
+      const website = (
+        e.currentTarget.elements.namedItem("website") as HTMLInputElement | null
+      )?.value ?? "";
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          website,
+          submittedAt: submittedAtRef.current,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
       setSubmitted(true);
-    }, 1200);
+    } catch {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -48,7 +75,6 @@ export default function ContactSection() {
       </Reveal>
 
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24">
-
 
         <div className="lg:col-span-7">
           <Reveal>
@@ -75,6 +101,18 @@ export default function ContactSection() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+
+                <div aria-hidden="true" style={{ position: "absolute", left: "-9999px" }}>
+                  <label htmlFor="website">Website</label>
+                  <input
+                    id="website"
+                    name="website"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    defaultValue=""
+                  />
+                </div>
 
                 <div>
                   <label className="mb-2 block font-jetbrains text-[11px] sm:text-xs uppercase tracking-[0.18em] text-muted">
@@ -130,6 +168,12 @@ export default function ContactSection() {
                 >
                   {sending ? "Sending..." : "Send Message →"}
                 </button>
+
+                {error && (
+                  <p className="text-sm text-red-400">
+                    Something went wrong. Please try again.
+                  </p>
+                )}
               </form>
             )}
           </Reveal>

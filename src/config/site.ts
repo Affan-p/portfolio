@@ -1,5 +1,7 @@
 import type { NavLink, SocialLink } from "@/types";
 
+export const MIN_SUBMIT_TIME_MS = 2000;
+
 export const NAV_LINKS: NavLink[] = [
   { label: "Overview", href: "#overview" },
   { label: "Experience", href: "#experience" },

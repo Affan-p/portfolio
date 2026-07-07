@@ -1,0 +1,29 @@
+name: Database Migration
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'drizzle/**/*.sql'
+      - 'drizzle/meta/**'
+      - 'src/lib/db/schema.ts'
+      - 'src/db/migrate.ts'
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply pending migrations
+        run: npm run db:migrate

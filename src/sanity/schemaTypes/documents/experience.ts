@@ -31,12 +31,6 @@ export const experience = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
-      name: "tags",
-      type: "array",
-      of: [{ type: "string" }],
-      validation: (r) => r.unique(),
-    }),
-    defineField({
       name: "order",
       title: "Order",
       type: "number",

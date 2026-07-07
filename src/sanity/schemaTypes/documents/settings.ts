@@ -8,9 +8,7 @@ export const settings = defineType({
   icon: CogIcon,
   groups: [
     { title: "Hero", name: "hero" },
-    { title: "Navigation", name: "navigation" },
     { title: "Overview", name: "overview" },
-    { title: "Social", name: "social" },
     { title: "Bands", name: "bands" },
   ],
   fields: [
@@ -44,24 +42,7 @@ export const settings = defineType({
       type: "string",
       group: "hero",
     }),
-    defineField({
-      name: "navLinks",
-      title: "Navigation Links",
-      type: "array",
-      group: "navigation",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "label", type: "string", title: "Label" },
-            { name: "href", type: "string", title: "URL" },
-          ],
-          preview: {
-            select: { title: "label", subtitle: "href" },
-          },
-        },
-      ],
-    }),
+
     defineField({
       name: "overviewHeadline",
       title: "Overview Headline",
@@ -89,24 +70,6 @@ export const settings = defineType({
       type: "array",
       group: "overview",
       of: [{ type: "string" }],
-    }),
-    defineField({
-      name: "socialLinks",
-      title: "Social Links",
-      type: "array",
-      group: "social",
-      of: [
-        {
-          type: "object",
-          fields: [
-            { name: "label", type: "string", title: "Label" },
-            { name: "href", type: "string", title: "URL" },
-          ],
-          preview: {
-            select: { title: "label", subtitle: "href" },
-          },
-        },
-      ],
     }),
     defineField({
       name: "band1",
