@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
@@ -20,11 +20,6 @@ export default function ContactSection() {
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
-  const submittedAtRef = useRef("");
-
-  useEffect(() => {
-    submittedAtRef.current = new Date().toISOString();
-  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -44,7 +39,6 @@ export default function ContactSection() {
           email: form.email,
           message: form.message,
           website,
-          submittedAt: submittedAtRef.current,
         }),
       });
 
