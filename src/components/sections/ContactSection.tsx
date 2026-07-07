@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
@@ -20,6 +20,18 @@ export default function ContactSection() {
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+  const [pressed, setPressed] = useState(false);
+  const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function startPress() {
+    if (pressTimer.current) clearTimeout(pressTimer.current);
+    setPressed(true);
+  }
+
+  function endPress() {
+    // keep the pressed color visible for at least 150ms
+    pressTimer.current = setTimeout(() => setPressed(false), 150);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,9 +39,12 @@ export default function ContactSection() {
     setError(false);
 
     try {
-      const website = (
-        e.currentTarget.elements.namedItem("website") as HTMLInputElement | null
-      )?.value ?? "";
+      const website =
+        (
+          e.currentTarget.elements.namedItem(
+            "website",
+          ) as HTMLInputElement | null
+        )?.value ?? "";
 
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -53,10 +68,7 @@ export default function ContactSection() {
   }
 
   return (
-    <Section
-      id="contact"
-      className="border-t border-white/5 py-24 lg:py-40"
-    >
+    <Section id="contact" className="border-t border-white/5 py-24 lg:py-40">
       <Reveal>
         <div className="mb-14 flex items-center gap-3">
           <span className="font-jetbrains text-xs tracking-[0.18em] text-muted">
@@ -69,7 +81,6 @@ export default function ContactSection() {
       </Reveal>
 
       <div className="grid grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-24">
-
         <div className="lg:col-span-7">
           <Reveal>
             <h2 className="font-heading font-extrabold uppercase leading-[0.9] tracking-[-0.03em] text-text [font-size:clamp(2rem,8vw,4rem)]">
@@ -90,13 +101,16 @@ export default function ContactSection() {
                   Sent.
                 </h3>
                 <p className="mt-4 max-w-sm font-body text-sm leading-relaxed text-muted">
-                  Thanks for reaching out. I&apos;ll get back to you within a day or two.
+                  Thanks for reaching out. I&apos;ll get back to you within a
+                  day or two.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
-
-                <div aria-hidden="true" style={{ position: "absolute", left: "-9999px" }}>
+                <div
+                  aria-hidden="true"
+                  style={{ position: "absolute", left: "-9999px" }}
+                >
                   <label htmlFor="website">Website</label>
                   <input
                     id="website"
@@ -158,7 +172,12 @@ export default function ContactSection() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="w-full bg-muted px-6 py-3 sm:px-8 sm:py-4 font-heading text-sm font-extrabold uppercase tracking-[0.1em] text-text transition-opacity hover:opacity-85 hover:bg-primary disabled:opacity-60 cursor-pointer"
+                  onTouchStart={startPress}
+                  onTouchEnd={endPress}
+                  onTouchCancel={endPress}
+                  className={`w-full px-6 py-3 sm:px-8 sm:py-4 font-heading text-sm font-extrabold uppercase tracking-[0.1em] text-text transition-colors duration-150 disabled:opacity-60 cursor-pointer [-webkit-tap-highlight-color:transparent] ${
+                    pressed ? "bg-primary" : "bg-muted hover:bg-primary"
+                  }`}
                 >
                   {sending ? "Sending..." : "Send Message →"}
                 </button>
