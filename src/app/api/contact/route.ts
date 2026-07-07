@@ -3,20 +3,16 @@ import { contactSubmissions } from '@/lib/db/schema';
 import { isHoneypotFilled } from '@/lib/spam';
 import { contactFormSchema } from '@/lib/validation';
 
-const TG_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TG_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
 async function notifyTelegram(name: string, email: string, message: string) {
-  if (!TG_TOKEN || !TG_CHAT_ID) return;
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
   const text = `✉️ New Contact\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`;
-  await fetch(
-    `https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: TG_CHAT_ID, text }),
-    }
-  );
+  await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: chatId, text }),
+  });
 }
 
 export async function POST(request: Request) {
@@ -35,7 +31,7 @@ export async function POST(request: Request) {
 
   await db.insert(contactSubmissions).values({ name, email, message });
 
-  notifyTelegram(name, email, message).catch(() => {});
+  await notifyTelegram(name, email, message).catch(() => {});
 
   return Response.json({ success: true });
 }
