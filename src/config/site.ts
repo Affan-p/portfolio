@@ -10,7 +10,7 @@ export const NAV_LINKS: NavLink[] = [
 ];
 
 export const SOCIAL_LINKS: SocialLink[] = [
-  { label: "GitHub", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Email", href: "#" },
+  { label: "GitHub", href: "https://github.com/Affan-p" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/affanparkar" },
+  { label: "Email", href: "mailto:hello@affanparkar.dev" },
 ];

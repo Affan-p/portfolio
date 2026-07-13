@@ -7,12 +7,10 @@ export const SETTINGS_QUERY = defineQuery(`
     heroFirstName,
     heroLastName,
     heroMantra,
-    navLinks[] { label, href },
     overviewHeadline,
     overviewBody1,
     overviewBody2,
     overviewItems[],
-    socialLinks[] { label, href },
     band1[],
     band2[]
   }

@@ -29,6 +29,26 @@ export async function POST(request: Request) {
     return Response.json({ success: true });
   }
 
+  const turnstileToken = body.turnstileToken;
+  if (!turnstileToken) {
+    return Response.json({ error: "Verification failed" }, { status: 400 });
+  }
+  const verify = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        secret: process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY,
+        response: turnstileToken,
+      }),
+    },
+  );
+  const result = await verify.json();
+  if (!result.success) {
+    return Response.json({ error: "Verification failed" }, { status: 400 });
+  }
+
   await db.insert(contactSubmissions).values({ name, email, message });
 
   await notifyTelegram(name, email, message).catch(() => {});

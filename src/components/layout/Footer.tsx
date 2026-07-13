@@ -12,6 +12,8 @@ export default function Footer() {
             <a
               key={label}
               href={href}
+              target="_blank"
+              rel="noopener noreferrer"
               aria-label={label}
               className="text-[11px] font-medium uppercase tracking-widest text-muted transition-colors duration-200 hover:text-primary"
             >

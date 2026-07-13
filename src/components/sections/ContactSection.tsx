@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { Reveal } from "@/components/ui/Reveal";
 import { Section } from "@/components/ui/Section";
 
@@ -21,6 +22,7 @@ export default function ContactSection() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
   const [pressed, setPressed] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>();
   const pressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function startPress() {
@@ -29,7 +31,6 @@ export default function ContactSection() {
   }
 
   function endPress() {
-    // keep the pressed color visible for at least 150ms
     pressTimer.current = setTimeout(() => setPressed(false), 150);
   }
 
@@ -54,6 +55,7 @@ export default function ContactSection() {
           email: form.email,
           message: form.message,
           website,
+          turnstileToken,
         }),
       });
 
@@ -168,6 +170,12 @@ export default function ContactSection() {
                     className="w-full resize-none border-b border-white/20 bg-transparent pb-2 sm:pb-3 font-body text-base leading-relaxed text-text outline-none transition-colors placeholder:text-muted focus:border-primary"
                   />
                 </div>
+
+                <Turnstile
+                  siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY!}
+                  onSuccess={setTurnstileToken}
+                  options={{ appearance: "interaction-only" }}
+                />
 
                 <button
                   type="submit"
