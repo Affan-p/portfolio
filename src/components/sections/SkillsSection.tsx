@@ -2,7 +2,7 @@ import { Section } from "@/components/ui/Section";
 import { MarqueeRow } from "@/components/ui/MarqueeRow";
 
 interface SkillRow {
-  label: string
+  label?: string | null
   items: string[]
 }
 
@@ -35,7 +35,7 @@ export default function SkillsSection({ skillRows }: SkillsSectionProps) {
             const reverse = i % 2 === 1;
             return (
               <div
-                key={row.label}
+                key={row.label ?? i}
                 className="grid grid-cols-[56px_1fr] sm:grid-cols-[80px_1fr] md:grid-cols-[120px_1fr] h-14 sm:h-16 md:h-20 border-t border-white/5"
               >
                 <div className="h-full overflow-hidden flex items-center justify-center pl-3 pr-2 sm:pl-6 sm:pr-4 md:pl-10 md:pr-6">

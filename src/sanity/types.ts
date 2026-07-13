@@ -15,41 +15,14 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
-export type Certificate = {
-  _id: string;
-  _type: "certificate";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  name: string;
-  issuer: string;
-  date: string;
-  credId?: string;
-  order?: number;
-};
-
 export type SkillRow = {
   _id: string;
   _type: "skillRow";
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  label: string;
+  label?: string;
   items?: Array<string>;
-  order?: number;
-};
-
-export type Project = {
-  _id: string;
-  _type: "project";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title: string;
-  role: string;
-  description: string;
-  tags?: Array<string>;
-  href?: string;
   order?: number;
 };
 
@@ -59,11 +32,10 @@ export type Experience = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  company: string;
-  role: string;
-  period: string;
-  description: string;
-  tags?: Array<string>;
+  company?: string;
+  role?: string;
+  period?: string;
+  description?: string;
   order?: number;
 };
 
@@ -78,20 +50,10 @@ export type Settings = {
   heroFirstName?: string;
   heroLastName?: string;
   heroMantra?: string;
-  navLinks?: Array<{
-    label?: string;
-    href?: string;
-    _key: string;
-  }>;
   overviewHeadline?: string;
   overviewBody1?: string;
   overviewBody2?: string;
   overviewItems?: Array<string>;
-  socialLinks?: Array<{
-    label?: string;
-    href?: string;
-    _key: string;
-  }>;
   band1?: Array<string>;
   band2?: Array<string>;
 };
@@ -117,9 +79,9 @@ export type SanityImagePalette = {
 
 export type SanityImageDimensions = {
   _type: "sanity.imageDimensions";
-  height: number;
-  width: number;
-  aspectRatio: number;
+  height?: number;
+  width?: number;
+  aspectRatio?: number;
 };
 
 export type SanityImageMetadata = {
@@ -136,18 +98,18 @@ export type SanityImageMetadata = {
 
 export type SanityImageHotspot = {
   _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
 };
 
 export type SanityImageCrop = {
   _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
 };
 
 export type SanityFileAsset = {
@@ -161,14 +123,14 @@ export type SanityFileAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
   uploadId?: string;
-  path: string;
-  url: string;
+  path?: string;
+  url?: string;
   source?: SanityAssetSourceData;
 };
 
@@ -190,14 +152,14 @@ export type SanityImageAsset = {
   title?: string;
   description?: string;
   altText?: string;
-  sha1hash: string;
-  extension: string;
-  mimeType: string;
-  size: number;
-  assetId: string;
+  sha1hash?: string;
+  extension?: string;
+  mimeType?: string;
+  size?: number;
+  assetId?: string;
   uploadId?: string;
-  path: string;
-  url: string;
+  path?: string;
+  url?: string;
   metadata?: SanityImageMetadata;
   source?: SanityAssetSourceData;
 };
@@ -211,14 +173,12 @@ export type Geopoint = {
 
 export type Slug = {
   _type: "slug";
-  current: string;
+  current?: string;
   source?: string;
 };
 
 export type AllSanitySchemaTypes =
-  | Certificate
   | SkillRow
-  | Project
   | Experience
   | Settings
   | SanityImagePaletteSwatch
@@ -235,7 +195,7 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/queries/index.ts
 // Variable: SETTINGS_QUERY
-// Query: *[_id == "siteSettings"][0]{    heroRole,    heroLocation,    heroFirstName,    heroLastName,    heroMantra,    navLinks[] { label, href },    overviewHeadline,    overviewBody1,    overviewBody2,    overviewItems[],    socialLinks[] { label, href },    band1[],    band2[]  }
+// Query: *[_id == "siteSettings"][0]{    heroRole,    heroLocation,    heroFirstName,    heroLastName,    heroMantra,    overviewHeadline,    overviewBody1,    overviewBody2,    overviewItems[],    band1[],    band2[]  }
 export type SETTINGS_QUERY_RESULT =
   | {
       heroRole: null;
@@ -243,12 +203,10 @@ export type SETTINGS_QUERY_RESULT =
       heroFirstName: null;
       heroLastName: null;
       heroMantra: null;
-      navLinks: null;
       overviewHeadline: null;
       overviewBody1: null;
       overviewBody2: null;
       overviewItems: null;
-      socialLinks: null;
       band1: null;
       band2: null;
     }
@@ -258,18 +216,10 @@ export type SETTINGS_QUERY_RESULT =
       heroFirstName: string | null;
       heroLastName: string | null;
       heroMantra: string | null;
-      navLinks: Array<{
-        label: string | null;
-        href: string | null;
-      }> | null;
       overviewHeadline: string | null;
       overviewBody1: string | null;
       overviewBody2: string | null;
       overviewItems: Array<string> | null;
-      socialLinks: Array<{
-        label: string | null;
-        href: string | null;
-      }> | null;
       band1: Array<string> | null;
       band2: Array<string> | null;
     }
@@ -279,50 +229,27 @@ export type SETTINGS_QUERY_RESULT =
 // Variable: EXPERIENCES_QUERY
 // Query: *[_type == "experience"] | order(order asc){    company,    role,    period,    description,    tags[]  }
 export type EXPERIENCES_QUERY_RESULT = Array<{
-  company: string;
-  role: string;
-  period: string;
-  description: string;
-  tags: Array<string> | null;
-}>;
-
-// Source: src/sanity/queries/index.ts
-// Variable: PROJECTS_QUERY
-// Query: *[_type == "project"] | order(order asc){    title,    role,    description,    tags[],    href  }
-export type PROJECTS_QUERY_RESULT = Array<{
-  title: string;
-  role: string;
-  description: string;
-  tags: Array<string> | null;
-  href: string | null;
+  company: string | null;
+  role: string | null;
+  period: string | null;
+  description: string | null;
+  tags: null;
 }>;
 
 // Source: src/sanity/queries/index.ts
 // Variable: SKILL_ROWS_QUERY
 // Query: *[_type == "skillRow"] | order(order asc){    label,    items[]  }
 export type SKILL_ROWS_QUERY_RESULT = Array<{
-  label: string;
+  label: string | null;
   items: Array<string> | null;
-}>;
-
-// Source: src/sanity/queries/index.ts
-// Variable: CERTIFICATES_QUERY
-// Query: *[_type == "certificate"] | order(order asc){    name,    issuer,    date,    credId  }
-export type CERTIFICATES_QUERY_RESULT = Array<{
-  name: string;
-  issuer: string;
-  date: string;
-  credId: string | null;
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n  *[_id == "siteSettings"][0]{\n    heroRole,\n    heroLocation,\n    heroFirstName,\n    heroLastName,\n    heroMantra,\n    navLinks[] { label, href },\n    overviewHeadline,\n    overviewBody1,\n    overviewBody2,\n    overviewItems[],\n    socialLinks[] { label, href },\n    band1[],\n    band2[]\n  }\n': SETTINGS_QUERY_RESULT;
+    '\n  *[_id == "siteSettings"][0]{\n    heroRole,\n    heroLocation,\n    heroFirstName,\n    heroLastName,\n    heroMantra,\n    overviewHeadline,\n    overviewBody1,\n    overviewBody2,\n    overviewItems[],\n    band1[],\n    band2[]\n  }\n': SETTINGS_QUERY_RESULT;
     '\n  *[_type == "experience"] | order(order asc){\n    company,\n    role,\n    period,\n    description,\n    tags[]\n  }\n': EXPERIENCES_QUERY_RESULT;
-    '\n  *[_type == "project"] | order(order asc){\n    title,\n    role,\n    description,\n    tags[],\n    href\n  }\n': PROJECTS_QUERY_RESULT;
     '\n  *[_type == "skillRow"] | order(order asc){\n    label,\n    items[]\n  }\n': SKILL_ROWS_QUERY_RESULT;
-    '\n  *[_type == "certificate"] | order(order asc){\n    name,\n    issuer,\n    date,\n    credId\n  }\n': CERTIFICATES_QUERY_RESULT;
   }
 }

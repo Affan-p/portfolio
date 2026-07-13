@@ -3,10 +3,10 @@ import { Section } from "@/components/ui/Section";
 import { Reveal } from "@/components/ui/Reveal";
 
 interface Experience {
-  company: string
-  role: string
-  period: string
-  description: string
+  company?: string | null
+  role?: string | null
+  period?: string | null
+  description?: string | null
   tags: string[]
 }
 
@@ -33,7 +33,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
 
       <div className="flex flex-col">
         {experiences.map((exp, i) => (
-          <Reveal key={exp.company} delay={i * 80}>
+          <Reveal key={exp.company ?? i} delay={i * 80}>
             <div className="border-t border-white/5 py-10 sm:py-12 lg:py-14">
               <div className="flex flex-wrap items-start justify-between gap-4 mb-3">
                 <h3
